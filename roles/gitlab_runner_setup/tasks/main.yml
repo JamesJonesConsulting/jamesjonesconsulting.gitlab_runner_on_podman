@@ -8,7 +8,7 @@
       - "{{ gitlab_runner_username }}"
 - name: Setup the GitLab Runner Repository 
   shell: |
-    curl -L "https://packages.gitlab.com/install/repositories/runner/gitlab-runner/script.rpm.sh" | sudo bash
+    curl -L "https://packages.gitlab.com/install/repositories/runner/gitlab-runner/script.rpm.sh" | bash
 - name: Adjust version if not supported 
   block:
     - name: Set best compatible version 
@@ -16,7 +16,7 @@
         basearch: "(supported_gitab_runners[ansible_facts['os_family']] | map('int') | max) if ((ansible_facts['distribution_major_version'] | int) > (supported_gitab_runners[ansible_facts['os_family']] | map('int') | max)) else (supported_gitab_runners[ansible_facts['os_family']] | map('int') | min)"
 
 
-        
+
   when: 
     - "ansible_facts['distribution_major_version'] not in supported_gitab_runners[ansible_facts['os_family']]"
   

@@ -1,2 +1,7 @@
 ---
-# vars file for gitlab_runner_setup
+supported_gitab_runners:
+  Fedora:
+    - 32
+    - 33
+    - 34
+    - 35

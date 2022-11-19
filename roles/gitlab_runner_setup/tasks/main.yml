@@ -1,2 +1,8 @@
 ---
 # tasks file for gitlab_runner_setup
+- include_role:
+    name: jamesjonesconsulting.podman_socket_group_permissions.permissions_setup
+  vars:
+    podman_user_group: "{{ gitlab_runner_podman_group }}"
+    podman_users:
+      - "{{ gitlab_runner_username }}"

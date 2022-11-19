@@ -1,7 +1,7 @@
 ---
 supported_gitab_runners:
   Fedora:
-    - 32
-    - 33
-    - 34
-    - 35
+    - '32'
+    - '33'
+    - '34'
+    - '35'

@@ -34,8 +34,8 @@
       shell: |
         curl -L "https://packages.gitlab.com/install/repositories/runner/gitlab-runner/script.rpm.sh" | bash
       environment: 
-        dist: "{{ (supported_gitab_runners[ansible_facts['distribution']] | max) if ((ansible_facts['distribution_major_version'] | int) > (supported_gitab_runners[ansible_facts['distribution']] | max)) else (supported_gitab_runners[ansible_facts['distribution']] | min) }}"
-        os: "{{ supported_gitab_runner_dists[ansible_facts['distribution']].os_name }}"
+        dist: "{{ (supported_gitab_runners[ansible_facts['distribution']]['dist'] | max) if ((ansible_facts['distribution_major_version'] | int) > (supported_gitab_runners[ansible_facts['distribution']]['dist'] | max)) else (supported_gitab_runners[ansible_facts['distribution']]['dist'] | min) }}"
+        os: "{{ supported_gitab_runners[ansible_facts['distribution']]['os'] }}"
         
 
     # - name: Download GitLab Runner yum repo file

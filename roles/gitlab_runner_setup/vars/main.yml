@@ -1,12 +1,13 @@
 ---
 supported_gitab_runners:
   Fedora:
-    - 32
-    - 33
-    - 34
-    - 35
-supported_gitab_runner_dists:
-  Fedora:
-    os_name: fedora
+    os: fedora
+    dist:
+      - 32
+      - 33
+      - 34
+      - 35
   RedHat:
-    os_name: el
+    os: redhatenterpriseserver
+    dist:
+      - 7

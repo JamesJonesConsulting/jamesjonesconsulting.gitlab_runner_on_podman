@@ -17,6 +17,21 @@
 - name: Cleanup unregistered config entries
   shell: |
     gitlab-runner verify --delete
+- set_fact:
+    register_options: []
+- set_fact:
+    register_options: "{{ (register_options | default([])) + [opt.option] }}"
+  when:
+    - "opt.valid"
+  loop:
+    - option: "--tag-list \"{{ tag_list }}\""
+      valid: "{{ (gitlab_runner_tags | default([])) | length }}"
+    - option: "--run-untagged"
+      valid: true
+  loop_control:
+    loop_var: opt
+  vars:
+    tag_list: "{{ gitlab_runner_tags | join(',') }}"
 - name: Register the gitlab-runner non-interactively
   shell: |
     gitlab-runner register --non-interactive --url {{ gitlab_runner_url }} \
@@ -28,6 +43,7 @@
       --docker-privileged "true" \
       --docker-network-mode "host" \
       --description "{{ inventory_hostname }}" \
-      {{ ('--tag-list ' + (gitlab_runner_tags | join(',') | quote)) if (gitlab_runner_tags | default([]) | length) > 0 else '--run-untagged' }} \
+      {{ register_options | join('' )}} \
       --locked="false"
   no_log: true
+#       {{ ('--tag-list ' + (gitlab_runner_tags | join(',') | quote)) if (gitlab_runner_tags | default([]) | length) > 0 else '--run-untagged' }} \

@@ -37,7 +37,7 @@
   vars:
     token: "{{ runner_conf.split()[0].split('=')[1] }}"
     url: "{{ runner_conf.split()[1].split('=')[1] }}"
-  loop: configured_runners.split('\n')
+  loop: "{{ configured_runners.split('\n') }}"
   loop_control:
     loop_var: runner_conf
 # - block:

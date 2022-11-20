@@ -1,5 +1,4 @@
 ---
-# tasks file for gitlab_runner_setup
 - name: Setup the GitLab repo
   block:
     - name: Setup the GitLab Runner Repository 

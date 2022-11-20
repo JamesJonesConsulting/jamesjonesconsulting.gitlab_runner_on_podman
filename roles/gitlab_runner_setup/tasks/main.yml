@@ -25,6 +25,18 @@
     podman_user_group: "{{ gitlab_runner_podman_group }}"
     podman_users:
       - "{{ gitlab_runner_username }}"
+- debug:
+    msg: "{{ gitlab_runner_tags }}"
+- block:
+  - name: Verify if the gitlab-runner is already setup 
+    shell: |
+      gitlab-runner verify --name {{ inventory_hostname }} --delete
+    register: gitlab_runner_exists
+    failed_when: "gitlab_runner_exists.rc != 0"
+  rescue:
+    - name: Remove existing runner 
+      shell: |
+        gitlab-runner unregister --name {{ inventory_hostname }}
 - name: Register the gitlab-runner non-interactively
   shell: |
     gitlab-runner register --non-interactive --url {{ gitlab_runner_url }} \

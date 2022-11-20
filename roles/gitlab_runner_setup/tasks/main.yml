@@ -24,6 +24,22 @@
     podman_user_group: "{{ gitlab_runner_podman_group }}"
     podman_users:
       - "{{ gitlab_runner_username }}"
+- name: Get list of configured runners for this hostname 
+  shell: |
+    gitlab-runner list 2>&1 | grep {{ inventory_hostname }} | tr -s ' ' | cut -d' ' -f4,5
+  register: configured_runners
+- name: Remove existing runner 
+  shell: |
+    gitlab-runner unregister --url {{ url }} --token {{ token }}
+  vars:
+    token: "{{ runner_conf.split()[0].split('=')[1] }}"
+    url: "{{ runner_conf.split()[1].split('=')[1] | trim }}"
+  loop: "{{ configured_runners.stdout_lines }}"
+  loop_control:
+    loop_var: runner_conf
+- name: Cleanup unregistered config entries
+  shell: |
+    gitlab-runner verify --delete
 - include_tasks: multi-runner.yml
   loop: "{{ range(1, ((gitlab_runner_count | default(1)) | int) + 1,1) | list }}"
   loop_control:

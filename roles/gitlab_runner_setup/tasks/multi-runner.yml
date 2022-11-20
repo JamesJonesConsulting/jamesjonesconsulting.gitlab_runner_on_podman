@@ -1,22 +1,6 @@
 ---
 - debug:
     msg: "{{ runner_suffix }}"
-- name: Get list of configured runners for this hostname 
-  shell: |
-    gitlab-runner list 2>&1 | grep {{ inventory_hostname }} | tr -s ' ' | cut -d' ' -f4,5
-  register: configured_runners
-- name: Remove existing runner 
-  shell: |
-    gitlab-runner unregister --url {{ url }} --token {{ token }}
-  vars:
-    token: "{{ runner_conf.split()[0].split('=')[1] }}"
-    url: "{{ runner_conf.split()[1].split('=')[1] | trim }}"
-  loop: "{{ configured_runners.stdout_lines }}"
-  loop_control:
-    loop_var: runner_conf
-- name: Cleanup unregistered config entries
-  shell: |
-    gitlab-runner verify --delete
 - set_fact:
     register_options: []
 - set_fact:
@@ -24,7 +8,7 @@
   when:
     - "opt.valid"
   loop:
-    - option: "--tag-list \"{{ tag_list }}\""
+    - option: "--tag-list {{ tag_list }}"
       valid: "{{ (gitlab_runner_tags | default([])) | length | bool }}"
     - option: "--run-untagged"
       valid: "{{ gitlab_runner_run_untagged | default(true) }}"

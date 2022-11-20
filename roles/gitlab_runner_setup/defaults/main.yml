@@ -2,3 +2,5 @@
 # defaults file for gitlab_runner_setup
 gitlab_runner_username: gitlab-runner
 gitlab_runner_podman_group: docker
+gitlab_runner_url: https://gitlab.com/
+gitlab_runner_registration_token: abcdefghijklmnopqrstuvwxyz

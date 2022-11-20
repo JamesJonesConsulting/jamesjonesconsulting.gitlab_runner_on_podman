@@ -24,4 +24,15 @@
   yum:
     name: gitlab-runner
     state: latest
-
+- name: Register the gitlab-runner non-interactively
+  shell: |
+    gitlab-runner register --non-interactive --url {{ gitlab_runner_url }} \
+      --registration-token {{ gitlab_runner_registration_token }} \
+      --executor "docker" \
+      --docker-image "quay.io/podman/stable" \
+      --docker-host "unix:///run/podman/podman.sock" \
+      --docker-tlsverify "false" \
+      --docker-privileged "true" \
+      --docker-network-mode "host" \
+      --description {{ inventory_hostname }} \
+      --run-untagged --locked="false"

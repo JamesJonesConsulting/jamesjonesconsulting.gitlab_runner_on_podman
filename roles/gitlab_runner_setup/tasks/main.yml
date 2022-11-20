@@ -25,6 +25,6 @@
     podman_users:
       - "{{ gitlab_runner_username }}"
 - include_tasks: multi-runner.yml
-  loop: "{{ range(1, (gitlab_runner_count | default(1)) + 1,1) | list }}"
+  loop: "{{ range(1, ((gitlab_runner_count | default(1)) | int) + 1,1) | list }}"
   loop_control:
     loop_var: runner_suffix

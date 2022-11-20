@@ -30,7 +30,7 @@
 - include_tasks: multi-runner.yml
   loop: "{{ range(1, (gitlab_runner_count | default(1))) }}"
   loop_control:
-    loop_value: runner_suffix
+    loop_var: runner_suffix
 # - name: Get list of configured runners for this hostname 
 #   shell: |
 #     gitlab-runner list 2>&1 | grep {{ inventory_hostname }} | tr -s ' ' | cut -d' ' -f4,5

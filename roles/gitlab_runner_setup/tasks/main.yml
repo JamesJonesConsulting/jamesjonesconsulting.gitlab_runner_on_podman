@@ -34,36 +34,23 @@
 - name: Remove existing runner 
   shell: |
     gitlab-runner unregister --url {{ url }} --token {{ token }}
-# - debug:
-#     msg: |
-#       {{ token }} and {{ url }}
   vars:
     token: "{{ runner_conf.split()[0].split('=')[1] }}"
     url: "{{ runner_conf.split()[1].split('=')[1] | trim }}"
   loop: "{{ configured_runners.stdout_lines }}"
   loop_control:
     loop_var: runner_conf
-# - block:
-#   - name: Verify if the gitlab-runner is already setup 
-#     shell: |
-#       gitlab-runner verify --name {{ inventory_hostname }} --delete
-#     register: gitlab_runner_exists
-#     failed_when: "gitlab_runner_exists.rc == 0"
-#   rescue:
-#     - name: Remove existing runner 
-#       shell: |
-#         gitlab-runner unregister --name {{ inventory_hostname }}
-# - name: Register the gitlab-runner non-interactively
-#   shell: |
-#     gitlab-runner register --non-interactive --url {{ gitlab_runner_url }} \
-#       --registration-token {{ gitlab_runner_registration_token }} \
-#       --executor "docker" \
-#       --docker-image "quay.io/podman/stable" \
-#       --docker-host "unix:///run/podman/podman.sock" \
-#       --docker-tlsverify "false" \
-#       --docker-privileged "true" \
-#       --docker-network-mode "host" \
-#       --description {{ inventory_hostname }} \
-#       {{ ('--tag-list ' + (gitlab_runner_tags | join(',') | quote)) if (gitlab_runner_tags | default([]) | length) > 0 else '--run-untagged' }} \
-#       --locked="false"
-#   no_log: true
+- name: Register the gitlab-runner non-interactively
+  shell: |
+    gitlab-runner register --non-interactive --url {{ gitlab_runner_url }} \
+      --registration-token {{ gitlab_runner_registration_token }} \
+      --executor "docker" \
+      --docker-image "quay.io/podman/stable" \
+      --docker-host "unix:///run/podman/podman.sock" \
+      --docker-tlsverify "false" \
+      --docker-privileged "true" \
+      --docker-network-mode "host" \
+      --description {{ inventory_hostname }} \
+      {{ ('--tag-list ' + (gitlab_runner_tags | join(',') | quote)) if (gitlab_runner_tags | default([]) | length) > 0 else '--run-untagged' }} \
+      --locked="false"
+  no_log: true

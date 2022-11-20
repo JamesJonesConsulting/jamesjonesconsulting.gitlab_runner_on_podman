@@ -23,7 +23,7 @@
   
   
 - name: Setup the GitLab repo
-- block:
+  block:
     - name: Setup the GitLab Runner Repository 
       shell: |
         curl -L "https://packages.gitlab.com/install/repositories/runner/gitlab-runner/script.rpm.sh" | bash

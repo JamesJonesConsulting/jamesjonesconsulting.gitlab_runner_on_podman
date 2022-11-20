@@ -26,7 +26,9 @@
     podman_users:
       - "{{ gitlab_runner_username }}"
 - debug:
-    msg: "{{ gitlab_runner_tags }}"
+    msg: |
+      {{ gitlab_runner_tags }}"
+      {{ (gitlab_runner_tags | join(',') | quote)) }}
 - include_tasks: multi-runner.yml
   loop: "{{ range(0, (gitlab_runner_count | default(1))) }}"
   loop_control:

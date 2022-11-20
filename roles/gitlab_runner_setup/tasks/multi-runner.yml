@@ -12,6 +12,9 @@
   loop: "{{ configured_runners.stdout_lines }}"
   loop_control:
     loop_var: runner_conf
+- name: Cleanup unregistered config entries
+  shell: |
+    gitlab-runner verify --delete
 - name: Register the gitlab-runner non-interactively
   shell: |
     gitlab-runner register --non-interactive --url {{ gitlab_runner_url }} \
@@ -22,7 +25,7 @@
       --docker-tlsverify "false" \
       --docker-privileged "true" \
       --docker-network-mode "host" \
-      --description {{ inventory_hostname }}-{{ runner_suffix }} \
+      --description "{{ inventory_hostname }}-{{ runner_suffix }}" \
       {{ ('--tag-list ' + (gitlab_runner_tags | join(',') | quote)) if (gitlab_runner_tags | default([]) | length) > 0 else '--run-untagged' }} \
       --locked="false"
   no_log: true

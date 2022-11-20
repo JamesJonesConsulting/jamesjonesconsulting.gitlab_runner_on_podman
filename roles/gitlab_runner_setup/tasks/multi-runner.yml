@@ -1,4 +1,6 @@
 ---
+- debug:
+    msg: "{{ runner_suffix }}"
 - name: Get list of configured runners for this hostname 
   shell: |
     gitlab-runner list 2>&1 | grep {{ inventory_hostname }}-{{ runner_suffix }} | tr -s ' ' | cut -d' ' -f4,5

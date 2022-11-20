@@ -29,4 +29,4 @@
     dest: /etc/yum.repos.d/runner_gitlab-runner.repo
   vars:
     dist: "{{ (supported_gitab_runners[ansible_facts['distribution']] | max) if ((ansible_facts['distribution_major_version'] | int) > (supported_gitab_runners[ansible_facts['distribution']] | max)) else (supported_gitab_runners[ansible_facts['distribution']] | min) }}"
-    os: "ansible_facts['distribution'] | lower"
+    os: "{{ ansible_facts['distribution'] | lower }}"

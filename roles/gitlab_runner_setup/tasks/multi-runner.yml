@@ -43,7 +43,7 @@
       --docker-privileged "true" \
       --docker-network-mode "host" \
       --description "{{ inventory_hostname }}" \
-      {{ register_options | join('' )}} \
+      {{ register_options | join(' ') }} \
       --locked="false"
   no_log: true
 #       {{ ('--tag-list ' + (gitlab_runner_tags | join(',') | quote)) if (gitlab_runner_tags | default([]) | length) > 0 else '--run-untagged' }} \

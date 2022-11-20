@@ -32,7 +32,7 @@
     shell: |
       gitlab-runner verify --name {{ inventory_hostname }} --delete
     register: gitlab_runner_exists
-    failed_when: "gitlab_runner_exists.rc != 0"
+    failed_when: "gitlab_runner_exists.rc == 0"
   rescue:
     - name: Remove existing runner 
       shell: |

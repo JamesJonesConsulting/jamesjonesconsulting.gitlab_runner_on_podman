@@ -28,7 +28,7 @@
 - debug:
     msg: "{{ gitlab_runner_tags }}"
 - include_tasks: multi-runner.yml
-  loop: "{{ range(1, (gitlab_runner_count | default(1))) }}"
+  loop: "{{ range(0, (gitlab_runner_count | default(1))) }}"
   loop_control:
     loop_var: runner_suffix
 # - name: Get list of configured runners for this hostname 

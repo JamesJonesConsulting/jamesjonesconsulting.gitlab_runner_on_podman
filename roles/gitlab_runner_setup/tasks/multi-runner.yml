@@ -32,6 +32,8 @@
     loop_var: opt
   vars:
     tag_list: "{{ gitlab_runner_tags | join(',') }}"
+- debug:
+    msg: "{{ register_options | join(' ') }}"
 - name: Register the gitlab-runner non-interactively
   shell: |
     gitlab-runner register --non-interactive --url {{ gitlab_runner_url }} \

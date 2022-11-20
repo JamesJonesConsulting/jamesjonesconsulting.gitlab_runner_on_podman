@@ -3,7 +3,7 @@
     msg: "{{ runner_suffix }}"
 - name: Get list of configured runners for this hostname 
   shell: |
-    gitlab-runner list 2>&1 | grep {{ inventory_hostname }}-{{ runner_suffix }} | tr -s ' ' | cut -d' ' -f4,5
+    gitlab-runner list 2>&1 | grep {{ inventory_hostname }} | tr -s ' ' | cut -d' ' -f4,5
   register: configured_runners
 - name: Remove existing runner 
   shell: |
@@ -27,7 +27,7 @@
       --docker-tlsverify "false" \
       --docker-privileged "true" \
       --docker-network-mode "host" \
-      --description "{{ inventory_hostname }}-{{ runner_suffix }}" \
+      --description "{{ inventory_hostname }}" \
       {{ ('--tag-list ' + (gitlab_runner_tags | join(',') | quote)) if (gitlab_runner_tags | default([]) | length) > 0 else '--run-untagged' }} \
       --locked="false"
   no_log: true

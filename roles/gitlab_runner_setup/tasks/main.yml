@@ -32,30 +32,3 @@
   loop: "{{ range(1, (gitlab_runner_count | default(1)) + 1,1) | list }}"
   loop_control:
     loop_var: runner_suffix
-# - name: Get list of configured runners for this hostname 
-#   shell: |
-#     gitlab-runner list 2>&1 | grep {{ inventory_hostname }} | tr -s ' ' | cut -d' ' -f4,5
-#   register: configured_runners
-# - name: Remove existing runner 
-#   shell: |
-#     gitlab-runner unregister --url {{ url }} --token {{ token }}
-#   vars:
-#     token: "{{ runner_conf.split()[0].split('=')[1] }}"
-#     url: "{{ runner_conf.split()[1].split('=')[1] | trim }}"
-#   loop: "{{ configured_runners.stdout_lines }}"
-#   loop_control:
-#     loop_var: runner_conf
-# - name: Register the gitlab-runner non-interactively
-#   shell: |
-#     gitlab-runner register --non-interactive --url {{ gitlab_runner_url }} \
-#       --registration-token {{ gitlab_runner_registration_token }} \
-#       --executor "docker" \
-#       --docker-image "quay.io/podman/stable" \
-#       --docker-host "unix:///run/podman/podman.sock" \
-#       --docker-tlsverify "false" \
-#       --docker-privileged "true" \
-#       --docker-network-mode "host" \
-#       --description {{ inventory_hostname }} \
-#       {{ ('--tag-list ' + (gitlab_runner_tags | join(',') | quote)) if (gitlab_runner_tags | default([]) | length) > 0 else '--run-untagged' }} \
-#       --locked="false"
-#   no_log: true

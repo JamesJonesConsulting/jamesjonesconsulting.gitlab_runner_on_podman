@@ -25,9 +25,9 @@
     - "opt.valid"
   loop:
     - option: "--tag-list \"{{ tag_list }}\""
-      valid: "{{ (gitlab_runner_tags | default([])) | length }}"
+      valid: "{{ (gitlab_runner_tags | default([])) | length | bool }}"
     - option: "--run-untagged"
-      valid: true
+      valid: "{{ gitlab_runner_run_untagged | default(true) }}"
   loop_control:
     loop_var: opt
   vars:

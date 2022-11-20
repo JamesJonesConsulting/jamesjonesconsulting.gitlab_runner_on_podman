@@ -20,3 +20,8 @@
       environment: 
         dist: "{{ (supported_gitab_runners[ansible_facts['distribution']]['dist'] | max) if ((ansible_facts['distribution_major_version'] | int) > (supported_gitab_runners[ansible_facts['distribution']]['dist'] | max)) else (supported_gitab_runners[ansible_facts['distribution']]['dist'] | min) }}"
         os: "{{ supported_gitab_runners[ansible_facts['distribution']]['os'] }}"
+- name: Ensure the latest version of the gitlab-runner is installed
+  yum:
+    name: gitlab-runner
+    state: latest
+

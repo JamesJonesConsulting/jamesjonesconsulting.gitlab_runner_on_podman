@@ -22,11 +22,26 @@
 #     - "(ansible_facts['distribution_major_version'] | int) not in supported_gitab_runners[ansible_facts['distribution']]"
   
   
+- block:
+    - name: Setup the GitLab Runner Repository 
+      shell: |
+        curl -L "https://packages.gitlab.com/install/repositories/runner/gitlab-runner/script.rpm.sh" | bash
+      environment: 
+        dist: "{{ (supported_gitab_runners[ansible_facts['distribution']] | max) if ((ansible_facts['distribution_major_version'] | int) > (supported_gitab_runners[ansible_facts['distribution']] | max)) else (supported_gitab_runners[ansible_facts['distribution']] | min) }}"
+        os: "{{ supported_gitab_runner_dists[ansible_facts['distribution']].os_name }}"
+        
 
-- name: Download GitLab Runner yum repo file
-  ansible.builtin.get_url:
-    url: "https://packages.gitlab.com/install/repositories/runner/gitlab-runner/config_file.repo?os={{ os }}&dist={{ dist }}&source=script"
-    dest: /etc/yum.repos.d/runner_gitlab-runner.repo
-  vars:
-    dist: "{{ (supported_gitab_runners[ansible_facts['distribution']] | max) if ((ansible_facts['distribution_major_version'] | int) > (supported_gitab_runners[ansible_facts['distribution']] | max)) else (supported_gitab_runners[ansible_facts['distribution']] | min) }}"
-    os: "{{ ansible_facts['distribution'] | lower }}"
+    # - name: Download GitLab Runner yum repo file
+    #   ansible.builtin.get_url:
+    #     url: "https://packages.gitlab.com/install/repositories/runner/gitlab-runner/config_file.repo?os={{ os }}&dist={{ dist }}&source=script"
+    #     dest: /etc/yum.repos.d/runner_gitlab-runner.repo
+    #   vars:
+    #     dist: "{{ (supported_gitab_runners[ansible_facts['distribution']] | max) if ((ansible_facts['distribution_major_version'] | int) > (supported_gitab_runners[ansible_facts['distribution']] | max)) else (supported_gitab_runners[ansible_facts['distribution']] | min) }}"
+    #     os: "{{ supported_gitab_runner_dists[ansible_facts['distribution']].os_name }}"
+  when:
+    - "ansible_facts['distribution'] in supported_gitab_runner_dists"
+- block:
+    - debug:
+        msg: "Your distribution {{ ansible_facts['distribution'] }} is either not supported by GitLab or by this collection"
+  when:
+    - "ansible_facts['distribution'] not in supported_gitab_runner_dists"

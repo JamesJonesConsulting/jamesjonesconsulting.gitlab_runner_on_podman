@@ -5,3 +5,6 @@ supported_gitab_runners:
     - 33
     - 34
     - 35
+supported_gitab_runner_dists:
+  Fedora:
+    os_name: fedora

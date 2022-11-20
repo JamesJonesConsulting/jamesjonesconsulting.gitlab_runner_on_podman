@@ -22,7 +22,14 @@
 #     - "(ansible_facts['distribution_major_version'] | int) not in supported_gitab_runners[ansible_facts['distribution']]"
   
   
+- name: Setup the GitLab repo
 - block:
+    - name: Setup the GitLab Runner Repository 
+      shell: |
+        curl -L "https://packages.gitlab.com/install/repositories/runner/gitlab-runner/script.rpm.sh" | bash
+  rescue:
+    - debug:
+        msg: "Something with your os and distribution version wasn't supported, attempting to pass those based on known compatibility."
     - name: Setup the GitLab Runner Repository 
       shell: |
         curl -L "https://packages.gitlab.com/install/repositories/runner/gitlab-runner/script.rpm.sh" | bash
@@ -38,10 +45,10 @@
     #   vars:
     #     dist: "{{ (supported_gitab_runners[ansible_facts['distribution']] | max) if ((ansible_facts['distribution_major_version'] | int) > (supported_gitab_runners[ansible_facts['distribution']] | max)) else (supported_gitab_runners[ansible_facts['distribution']] | min) }}"
     #     os: "{{ supported_gitab_runner_dists[ansible_facts['distribution']].os_name }}"
-  when:
-    - "ansible_facts['distribution'] in supported_gitab_runner_dists"
-- block:
-    - debug:
-        msg: "Your distribution {{ ansible_facts['distribution'] }} is either not supported by GitLab or by this collection"
-  when:
-    - "ansible_facts['distribution'] not in supported_gitab_runner_dists"
+#   when:
+#     - "ansible_facts['distribution'] in supported_gitab_runner_dists"
+# - block:
+#     - debug:
+#         msg: "Your distribution {{ ansible_facts['distribution'] }} is either not supported by GitLab or by this collection"
+#   when:
+#     - "ansible_facts['distribution'] not in supported_gitab_runner_dists"

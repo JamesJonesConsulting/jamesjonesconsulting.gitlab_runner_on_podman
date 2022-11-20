@@ -8,3 +8,5 @@ supported_gitab_runners:
 supported_gitab_runner_dists:
   Fedora:
     os_name: fedora
+  RedHat:
+    os_name: el

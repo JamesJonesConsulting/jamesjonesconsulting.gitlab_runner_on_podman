@@ -40,7 +40,21 @@
 - name: Cleanup unregistered config entries
   shell: |
     gitlab-runner verify --delete
-- include_tasks: multi-runner.yml
+- name: Register one or more runners
+  include_tasks: multi-runner.yml
   loop: "{{ range(1, ((gitlab_runner_count | default(1)) | int) + 1,1) | list }}"
   loop_control:
     loop_var: runner_suffix
+- name: Ensure the right setting persist after registering
+  command: |
+    sed -i 's/privileged = false/privileged = true/g' /etc/gitlab-runner/config.toml
+    sed -i 's/tls_verify = true/tls_verify = false/g' /etc/gitlab-runner/config.toml
+    sed -i 's/disable_cache = false/network = host/g' /etc/gitlab-runner/config.toml
+    sed -i '/disable_entrypoint_overwrite/d' /etc/gitlab-runner/config.toml
+    sed -i '/oom_kill_disable/d' /etc/gitlab-runner/config.toml
+    sed -i '/volumes/d' /etc/gitlab-runner/config.toml
+    sed -i '/shm_size/d' /etc/gitlab-runner/config.toml
+- name: Restart gitlab-runner
+  ansible.builtin.systemd:
+    name: gitlab-runner
+    state: restarted

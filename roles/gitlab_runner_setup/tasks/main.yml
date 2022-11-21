@@ -40,6 +40,7 @@
 - name: Cleanup unregistered config entries
   shell: |
     gitlab-runner verify --delete
+  ignore_errors: yes
 - name: Register one or more runners
   include_tasks: multi-runner.yml
   loop: "{{ range(1, ((gitlab_runner_count | default(1)) | int) + 1,1) | list }}"

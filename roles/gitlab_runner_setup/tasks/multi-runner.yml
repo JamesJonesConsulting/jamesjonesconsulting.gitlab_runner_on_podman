@@ -25,11 +25,11 @@
       --executor "docker" \
       --docker-image "quay.io/podman/stable" \
       --docker-host "unix:///run/podman/podman.sock" \
-      --docker-tlsverify "false" \
-      --docker-privileged "true" \
-      --docker-network-mode "host" \
+      --docker-tlsverify false \
+      --docker-privileged true \
+      --docker-network-mode host \
       --description "{{ inventory_hostname }}" \
       {{ register_options | join(' ') }} \
-      --locked="false"
+      --locked=false
   no_log: true
 #       {{ ('--tag-list ' + (gitlab_runner_tags | join(',') | quote)) if (gitlab_runner_tags | default([]) | length) > 0 else '--run-untagged' }} \

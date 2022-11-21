@@ -75,9 +75,10 @@
     line: "{{ opt }}"
     state: absent
   loop:
-    - '^(.*)oom_kill_disable(.*)'
-    - '^(.*)volumes(.*)'
-    - '^(.*)shm_size(.*)'
+    - '    disable_entrypoint_overwrite = false'
+    - '    oom_kill_disable = false'
+    - '    volumes = ["/cache"]'
+    - '    shm_size = 0'
   loop_control:
     loop_var: opt
 - name: Restart gitlab-runner

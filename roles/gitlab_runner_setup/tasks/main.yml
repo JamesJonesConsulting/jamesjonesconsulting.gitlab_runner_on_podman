@@ -76,3 +76,24 @@
   ansible.builtin.systemd:
     name: gitlab-runner
     state: restarted
+# - name: Remove the cleanup gitlab-runner-docker-cleanup container 
+#   docker_container:
+#     name: gitlab-runner-docker-cleanup
+#     state: absent
+#   ignore_errors: true
+# - name: Pull the latest gitlab-runner-docker-cleanup container 
+#   docker_image:
+#     name: gitlab-runner-docker-cleanup
+#     image: "quay.io/gitlab/gitlab-runner-docker-cleanup:latest"
+#     state: started
+#     restart: yes
+#     restart_policy: "always"
+#     volumes:
+#       - /run/podman/podman.sock:/var/run/docker.sock
+#     env: 
+#       LOW_FREE_SPACE: 10G
+#       EXPECTED_FREE_SPACE: 20G
+#       LOW_FREE_FILES_COUNT: 1048576
+#       EXPECTED_FREE_FILES_COUNT: 2097152
+#       DEFAULT_TTL: 10m
+#       USE_DF: 1
